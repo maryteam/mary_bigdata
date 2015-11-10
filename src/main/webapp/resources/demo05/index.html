@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="../build/react.js"></script>
+    <script src="../build/browser.min.js"></script>
+  </head>
+  <body>
+    <script type="text/babel">
+      var LoginComponent = React.createClass({
+    		handleClick: function() {
+    			alert('good');
+    		},
+    		render: function() {
+    			return (
+    				<fieldset>
+    					<div class="form-group">
+    					<input class="form-control" placeholder="User Name" name="username" ref="username" type="text" autofocus>
+    					</div>
+    					<div class="form-group">
+    						<input class="form-control" placeholder="Password" name="password" type="password" value="">
+    					</div>
+    					<div class="checkbox">
+    						<label>
+    							<input name="remember" type="checkbox" value="Remember Me">Remember Me
+    						</label>
+    					</div>
+    					<!-- Change this to a button or input when using this as a form -->
+    					<a href="#" class="btn btn-lg btn-success btn-block" onClick={this.handleClick}>Login</a>
+    				</fieldset>
+    				);
+    		}
+    	});
+
+    	React.render(
+    		<LoginComponent />,
+    		document.getElementById('login-form')
+    		);
+    </script>
+  </body>
+</html>
+
