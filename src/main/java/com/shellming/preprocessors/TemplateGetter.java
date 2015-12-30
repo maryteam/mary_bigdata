@@ -1,5 +1,7 @@
 package com.shellming.preprocessors;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.*;
@@ -21,6 +23,8 @@ public class TemplateGetter {
     private String inputName;
 
     private final int threshold = 20;
+
+//    private final double threshold = 0.6;
 
     private Map<String, String[]> toCombine;  // 等待合并的短信，key为userId-msgId-total
     private Pattern pattern = Pattern.compile("@([0-9]+)\\[([0-9]+)/([0-9]+)\\](.*)");
@@ -118,23 +122,31 @@ public class TemplateGetter {
         return content.substring(start, end);
     }
 
-    private BufferedWriter getTemplate(String content) throws IOException {
+    private BufferedWriter getTemplate(String content, Boolean isDebug) throws IOException {
         BufferedWriter result = null;
+        int currentMin = Integer.MAX_VALUE;
+        int index = 0;
         for(int i = 0; i < templateSamples.size(); i++){
             String sample = templateSamples.get(i);
-            if(StringUtils.getLevenshteinDistance(sample, content) < threshold){
+            int distance = StringUtils.getLevenshteinDistance(sample, content);
+            if(currentMin > distance){
+                currentMin = distance;
                 result = templates.get(i);
-                break;
+                index = i;
             }
         }
 
-        if(result == null) {
+        if(currentMin > threshold) {
             String templateName = String.format("template-%d.txt", templates.size());
             BufferedWriter writer = new BufferedWriter(new FileWriter(new File(baseDir, templateName)));
             templates.add(writer);
             templateSamples.add(content);
 
             result = writer;
+        }
+        else if(isDebug){
+            System.out.println("1:" + content);
+            System.out.println("2:" + templateSamples.get(index));
         }
 
         return result;
@@ -158,6 +170,45 @@ public class TemplateGetter {
             }
             return sb.toString();
         }
+    }
+
+    private double getDistance(String content, String sample){
+        int i = 0, j = 0;
+        boolean diff = false;
+        String lcs = getLCS(content, sample);
+        return ((double) lcs.length()) / content.length();
+    }
+
+    private String getLCS(String x, String y){
+        // 设置字符串长度
+        int substringLength1 = x.length();
+        int substringLength2 = y.length(); // 具体大小可自行设置
+
+        // 构造二维数组记录子问题x[i]和y[i]的LCS的长度
+        int[][] opt = new int[substringLength1 + 1][substringLength2 + 1];
+
+        // 从后向前，动态规划计算所有子问题。也可从前到后。
+        for (int i = substringLength1 - 1; i >= 0; i--) {
+            for (int j = substringLength2 - 1; j >= 0; j--) {
+                if (x.charAt(i) == y.charAt(j))
+                    opt[i][j] = opt[i + 1][j + 1] + 1;// 状态转移方程
+                else
+                    opt[i][j] = Math.max(opt[i + 1][j], opt[i][j + 1]);// 状态转移方程
+            }
+        }
+        StringBuilder sb = new StringBuilder();
+        int i = 0, j = 0;
+        while (i < substringLength1 && j < substringLength2) {
+            if (x.charAt(i) == y.charAt(j)) {
+                sb.append(x.charAt(i));
+                i++;
+                j++;
+            } else if (opt[i + 1][j] >= opt[i][j + 1])
+                i++;
+            else
+                j++;
+        }
+        return sb.toString();
     }
 
     public void combine(String outputName){
@@ -186,7 +237,7 @@ public class TemplateGetter {
         }
     }
 
-    public void getTemplates() {
+    public void getTemplates(Boolean isDebug) {
         try {
             BufferedReader reader = new BufferedReader(new FileReader(new File(baseDir, inputName)));
             int count = 0;
@@ -195,6 +246,8 @@ public class TemplateGetter {
                 if(count % 1000 == 0){
                     System.out.println("process done:" + count);
                 }
+                if(isDebug && count > 3000)
+                    break;
                 String line = reader.readLine();
                 if(line == null)
                     break;
@@ -202,8 +255,8 @@ public class TemplateGetter {
                 if(content == null){
                     continue;
                 }
-                BufferedWriter writer = getTemplate(content);
-                line = reform(line, content);
+                BufferedWriter writer = getTemplate(content, isDebug);
+//                line = reform(line, content);
                 writer.write(line + "\r\n");
             }
             reader.close();
@@ -221,11 +274,11 @@ public class TemplateGetter {
 
 
     public static void main(String[] args) {
-        String baseDir = "F:\\Courseware\\面向对象\\project\\";
-        String inputName = "sendrep_20150701-0.txt";
+        String base = "F:\\Courseware\\面向对象\\project\\12-23\\神州租车\\";
+        String source = "current.txt";
 
-        TemplateGetter getter = new TemplateGetter(baseDir, inputName);
-//        getter.getTemplates();
-        getter.combine("output.txt");
+        TemplateGetter getter = new TemplateGetter(base, source);
+        getter.getTemplates(true);
+//      getter.combine("output.txt");
     }
 }
