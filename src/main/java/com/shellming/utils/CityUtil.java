@@ -41,7 +41,7 @@ public class CityUtil {
         try {
             InputStream inputStream = resource.getInputStream();
             Gson gson = new Gson();
-            Map all = gson.fromJson(IOUtils.toString(inputStream), Map.class);
+            Map all = gson.fromJson(IOUtils.toString(inputStream, "utf-8"), Map.class);
             for(Object province : all.keySet()) {
                 Map pCities = (Map) all.get(province);
                 List<String> citiesStr = new ArrayList<>();
