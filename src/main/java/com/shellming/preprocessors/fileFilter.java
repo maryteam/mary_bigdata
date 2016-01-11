@@ -16,6 +16,7 @@ public class fileFilter {
         ArrayList<BufferedWriter> fileArrayList = new ArrayList<BufferedWriter>();
 
         File fileDir1 = new File(baseDir1);
+        int addd = 0;
         for (int i=0; i<5; i++){
             String a = String.format("%d.txt", i);
             File tempfile = new File(baseDir1, a);
