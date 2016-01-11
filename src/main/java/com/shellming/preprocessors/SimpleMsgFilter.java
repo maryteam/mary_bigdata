@@ -1,9 +1,6 @@
 package com.shellming.preprocessors;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -73,26 +70,34 @@ public class SimpleMsgFilter {
         }
     }
 
-    public static void filter(String source, String target, String keyword){
+    public static void filter(String baseDir, String source, String keyword){
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(source));
-            BufferedWriter writer = new BufferedWriter(new FileWriter(target));
-            StringBuffer sb = new StringBuffer();
+            File dir = new File(baseDir);
+            File sourceFile = new File(dir, source);
+            File targetFile = new File(dir, keyword + ".txt");
+            File tempFile = new File(dir, "temp");
+            BufferedReader reader = new BufferedReader(new FileReader(sourceFile));
+            BufferedWriter writer = new BufferedWriter(new FileWriter(targetFile));
+            BufferedWriter tempWriter = new BufferedWriter(new FileWriter(tempFile));
             int count = 0;
             while(true){
                 String line = reader.readLine();
                 if(line == null)
                     break;
                 if(line.contains(keyword)) {
-                    sb.append(line).append("\r\n");
+                    writer.write(line + "\r\n");
                     count++;
                 }
+                else{
+                    tempWriter.write(line + "\r\n");
+                }
             }
-            System.out.println(String.format("Keyword:%s\r\nCount:%d", keyword, count));
-            writer.write(String.format("Keyword:%s\r\nCount:%d", keyword, count));
-            writer.write(sb.toString());
             reader.close();
             writer.close();
+            tempWriter.close();
+
+            sourceFile.delete();
+            tempFile.renameTo(sourceFile);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -100,8 +105,10 @@ public class SimpleMsgFilter {
 
     public static void main(String[] args) {
         try {
-            String base = "F:\\Courseware\\面向对象\\project\\12-23\\神州租车\\";
-            String source = base + "current.txt";
+            String base = "F:\\Courseware\\面向对象\\project\\12-23\\三九\\";
+            String source = "current.txt";
+            String keyword = "尊敬的三九会员";
+            filter(base, source, keyword);
 //            String[] keywords = new String[]{"京东", "淘宝", "美丽说", "容通", "易宝", "微信", "支付", "购买"};
 //            for(String keyword : keywords){
 //                String target = base + keyword + ".txt";
@@ -112,7 +119,7 @@ public class SimpleMsgFilter {
 //            String include = "您本次用车费用";
 //            String target = base + include + ".txt";
 //            filter(source, target, include);
-//            String regex = "【神州专车】您预约的专车.*?将准时到达";
+//            String regex = "亲爱的张黎，您心仪的";
 //            String target = base + "current2.txt";
 //            filterWithRegex(source, target, regex, false);
         } catch (Exception e) {

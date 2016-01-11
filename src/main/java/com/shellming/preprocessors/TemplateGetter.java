@@ -179,7 +179,7 @@ public class TemplateGetter {
         return ((double) lcs.length()) / content.length();
     }
 
-    private String getLCS(String x, String y){
+    public static String getLCS(String x, String y){
         // 设置字符串长度
         int substringLength1 = x.length();
         int substringLength2 = y.length(); // 具体大小可自行设置
@@ -198,16 +198,30 @@ public class TemplateGetter {
         }
         StringBuilder sb = new StringBuilder();
         int i = 0, j = 0;
+        boolean isDiff = false;
+        int diff = 0;
+        int common = 0;
         while (i < substringLength1 && j < substringLength2) {
             if (x.charAt(i) == y.charAt(j)) {
                 sb.append(x.charAt(i));
                 i++;
                 j++;
-            } else if (opt[i + 1][j] >= opt[i][j + 1])
-                i++;
-            else
-                j++;
+                common++;
+                if(common > 1)
+                    isDiff = false;
+            } else{
+                common = 0;
+                if(!isDiff){
+                        diff++;
+                        isDiff = true;
+                }
+                if (opt[i + 1][j] >= opt[i][j + 1])
+                    i++;
+                else
+                    j++;
+            }
         }
+        System.out.println("diff count " + diff);
         return sb.toString();
     }
 
@@ -274,11 +288,15 @@ public class TemplateGetter {
 
 
     public static void main(String[] args) {
-        String base = "F:\\Courseware\\面向对象\\project\\12-23\\神州租车\\";
-        String source = "current.txt";
+//        String base = "F:\\Courseware\\面向对象\\project\\12-23\\神州租车\\";
+//        String source = "current.txt";
+//
+//        TemplateGetter getter = new TemplateGetter(base, source);
+//        getter.getTemplates(true);
 
-        TemplateGetter getter = new TemplateGetter(base, source);
-        getter.getTemplates(true);
+//        System.out.println(StringUtils.getLevenshteinDistance("abbcc", "aeecc"));
+//        getLCS("您本次用车应付金额98.0元，已支付96.0元，含代金券抵扣20.0元，仍需支付2.0元，请登录App或致电客服10101111完成支付。感谢您的支持！",
+//                "【神州专车】您于7月1日，成功给客户13390865682充值100.0元。");
 //      getter.combine("output.txt");
     }
 }
