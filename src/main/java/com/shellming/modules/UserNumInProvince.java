@@ -1,5 +1,7 @@
 package com.shellming.modules;
 
+import com.google.gson.Gson;
+
 /**
  * Created by ruluo1992 on 1/11/2016.
  */
@@ -46,5 +48,11 @@ public class UserNumInProvince {
 
     public void setTime(Long time) {
         this.time = time;
+    }
+
+    @Override
+    public String toString() {
+        Gson gson = new Gson();
+        return gson.toJson(this);
     }
 }

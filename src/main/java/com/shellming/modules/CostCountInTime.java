@@ -1,17 +1,19 @@
 package com.shellming.modules;
 
+import com.google.gson.Gson;
+
 /**
  * Created by ruluo1992 on 1/11/2016.
  */
 public class CostCountInTime {
     private String cName;
-    private String pName;
+    private Integer count;      // 支付次数
     private Integer hour;       // 发生支付的时间，24小时制
     private Long time;
 
-    public CostCountInTime(String cName, String pName, Integer hour, Long time) {
+    public CostCountInTime(String cName, Integer count, Integer hour, Long time) {
         this.cName = cName;
-        this.pName = pName;
+        this.count = count;
         this.hour = hour;
         this.time = time;
     }
@@ -24,12 +26,12 @@ public class CostCountInTime {
         this.cName = cName;
     }
 
-    public String getpName() {
-        return pName;
+    public Integer getCount() {
+        return count;
     }
 
-    public void setpName(String pName) {
-        this.pName = pName;
+    public void setCount(Integer count) {
+        this.count = count;
     }
 
     public Integer getHour() {
@@ -46,5 +48,11 @@ public class CostCountInTime {
 
     public void setTime(Long time) {
         this.time = time;
+    }
+
+    @Override
+    public String toString() {
+        Gson gson = new Gson();
+        return gson.toJson(this);
     }
 }
