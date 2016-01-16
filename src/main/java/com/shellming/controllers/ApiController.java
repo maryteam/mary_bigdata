@@ -2,6 +2,7 @@ package com.shellming.controllers;
 
 import com.google.gson.Gson;
 import com.shellming.modules.CostCountInTime;
+import com.shellming.modules.EnterpriseRank;
 import com.shellming.modules.UserCostInProvince;
 import com.shellming.modules.UserNumInProvince;
 import com.shellming.utils.CityUtil;
@@ -63,6 +64,23 @@ public class ApiController extends BaseController{
         List<String> strs = getResource("CostCountInTime-" + cName);
         for(String str : strs){
             CostCountInTime u = gson.fromJson(str, CostCountInTime.class);
+            result.add(u);
+        }
+        String resultStr = gson.toJson(result);
+        sendResponseAsJson(response, resultStr);
+    }
+
+    @RequestMapping(value = "/api/single/enterpriserank")
+    public  void getEnterpriseRank(HttpServletRequest request, HttpServletResponse response){
+        //String cName = request.getParameter("cname");
+//        if(cName == null)
+//            return;
+        List<EnterpriseRank> result = new ArrayList<>();
+        Gson gson = new Gson();
+        List<String> strs = getResource("EnterPriseRank");
+        System.out.println("!!!");
+        for(String str : strs){
+            EnterpriseRank u = gson.fromJson(str, EnterpriseRank.class);
             result.add(u);
         }
         String resultStr = gson.toJson(result);
