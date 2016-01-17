@@ -24,6 +24,12 @@ public class IndexController {
         return "redirect:/pages/login.html";
     }
 
+    @RequestMapping(value = "/index")
+    public String index2(Model model) {
+        model.addAttribute("content", "Hello world");
+        return "index";
+    }
+
     @RequestMapping(value = "/storage")
     @ResponseBody
     public String storage(HttpServletRequest request){
