@@ -6,7 +6,7 @@ apply plugin: 'war'
 apply plugin: 'jetty'
 
 
-sourceCompatibility = 1.7
+sourceCompatibility = 1.8
 
 repositories {
 //    mavenCentral()
@@ -38,5 +38,5 @@ jettyRunWar{
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.3'
+    gradleVersion = '2.1'
 }
