@@ -3,7 +3,7 @@
  */
 
 $(document).ready(function () {
-    $("#list1").html("京东");
+    //$("#list1").html("京东");
 
     var rank = [];
     var cName =  [];
