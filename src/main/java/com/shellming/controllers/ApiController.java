@@ -22,6 +22,40 @@ import java.util.*;
 @Controller
 public class ApiController extends BaseController{
 
+    @RequestMapping(value = "/api/multi/association")
+    public void getAssociation(HttpServletResponse response){
+        String[] data = new String[]{
+                " 1. 财付通 703897 ==> 腾讯 703750    conf:(1)",
+                " 2. 神州租车 财付通 5104 ==> 腾讯 5090    conf:(1)",
+                " 3. 京东 财付通 7160 ==> 腾讯 7137    conf:(1)",
+                " 4. 腾讯 752237 ==> 财付通 703750    conf:(0.94)",
+                " 5. 滴滴 19133 ==> 支付宝 17312    conf:(0.9)",
+                " 6. 支付宝 21083 ==> 滴滴 17312    conf:(0.82)",
+                " 7. 京东 79410 ==> 腾讯 45029    conf:(0.57)",
+                " 8. 神州租车 48004 ==> 京东 25876    conf:(0.54)",
+                " 9. 腾讯 神州租车 11266 ==> 财付通 5090    conf:(0.45)",
+                "10. 京东 79410 ==> 神州租车 25876    conf:(0.33)",
+                "11. 神州租车 48004 ==> 腾讯 11266    conf:(0.23)",
+                "12. 京东 腾讯 45029 ==> 财付通 7137    conf:(0.16)",
+                "13. 神州租车 48004 ==> 财付通 5104    conf:(0.11)",
+                "14. 神州租车 48004 ==> 腾讯 财付通 5090    conf:(0.11)",
+                "15. 京东 79410 ==> 财付通 7160    conf:(0.09)",
+                "16. 京东 79410 ==> 腾讯 财付通 7137    conf:(0.09)",
+                "17. 腾讯 752237 ==> 京东 45029    conf:(0.06)",
+                "18. 腾讯 752237 ==> 神州租车 11266    conf:(0.01)",
+                "19. 财付通 703897 ==> 京东 7160    conf:(0.01)",
+                "20. 腾讯 财付通 703750 ==> 京东 7137    conf:(0.01)",
+                "21. 财付通 703897 ==> 京东 腾讯 7137    conf:(0.01)",
+                "22. 腾讯 752237 ==> 京东 财付通 7137    conf:(0.01)",
+                "23. 财付通 703897 ==> 神州租车 5104    conf:(0.01)",
+                "24. 腾讯 财付通 703750 ==> 神州租车 5090    conf:(0.01)",
+                "25. 财付通 703897 ==> 腾讯 神州租车 5090    conf:(0.01)",
+                "26. 腾讯 752237 ==> 神州租车 财付通 5090    conf:(0.01)"
+        };
+        Gson gson = new Gson();
+        sendResponseAsJson(response, gson.toJson(Arrays.asList(data)));
+    }
+
     @RequestMapping(value = "/api/single/cityuser")
     public void getCityUserCount(HttpServletRequest request, HttpServletResponse response){
         String cName = request.getParameter("cname");

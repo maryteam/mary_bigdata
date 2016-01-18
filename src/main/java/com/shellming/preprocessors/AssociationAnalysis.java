@@ -12,7 +12,7 @@ import java.util.Map;
  */
 public class AssociationAnalysis {
     private Map<String,char[]> data; // userid  jd yb ld cf
-    private String[] companies = new String[]{"jd","tx","szzc","mpw","yl", "tb", "edj", "dd"};
+    private String[] companies = new String[]{"jd","tx","szzc","mpw","yl", "tb", "edj", "dd", "cft", "yb", "zfb", "ldys"};
     private final String outFile = "F:\\Courseware\\面向对象\\project\\out";
 
     public int getTotalCount(){
@@ -171,8 +171,9 @@ public class AssociationAnalysis {
         System.out.println(analysis.getMultiCount());
         System.out.println(analysis.getTotalCount());
 //        String baseDir = "F:\\Courseware\\面向对象\\project\\1-14\\";
-//        String fileName = "京东.txt";
-//        analysis.read(baseDir + fileName, 0);
+//        String fileName = "联动优势.txt";
+//        Integer index = 11;
+//        analysis.read(baseDir + fileName, index);
 //        analysis.save();
     }
 }
